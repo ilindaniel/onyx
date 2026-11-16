@@ -141,6 +141,35 @@ test("should trigger some ripples", async ({ mount, page }) => {
   await expect(component.locator(".onyx-ripple__element")).toHaveCount(3);
 });
 
+test("should transition from active to hover", async ({ mount, page }) => {
+  const component = await mount(<OnyxButton label="Button" />);
+
+  await component.hover();
+  await expect(component).toHaveCSS("transition-duration", "0s");
+
+  await page.mouse.down();
+  await expect(component).toHaveCSS("transition-duration", "0s");
+  await expect(component.locator(".onyx-ripple__element")).toHaveCount(1);
+
+  await page.mouse.up();
+  await expect(component).toHaveCSS("transition-property", "background-color, border-color, color");
+  await expect(component).toHaveCSS("transition-duration", "0.1s, 0.1s, 0.1s");
+
+  await expect(component.locator(".onyx-ripple__element")).toHaveCount(0);
+  await expect(component).toHaveCSS("transition-duration", "0s");
+});
+
+test("should remove ripples when reduced motion is enabled", async ({ mount, page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const component = await mount(<OnyxButton label="Button" />);
+
+  await component.click();
+  await page.mouse.move(0, 0);
+
+  await expect(component).toHaveCSS("transition-duration", "0s");
+  await expect(component.locator(".onyx-ripple__element")).toHaveCount(0);
+});
+
 test("should behave as link", async ({ mount, page }) => {
   // ARRANGE
   const component = await mount(<OnyxButton label="Test label" link="#test-section" />);

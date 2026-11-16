@@ -61,8 +61,8 @@ defineExpose({
 
       animation: onyx-ripple var(--onyx-duration-sm) cubic-bezier(0, 0, 0.2, 1) forwards;
 
-      @media (prefers-reduced-motion) {
-        animation: none;
+      @media (prefers-reduced-motion: reduce) {
+        animation-duration: 1ms;
       }
     }
 

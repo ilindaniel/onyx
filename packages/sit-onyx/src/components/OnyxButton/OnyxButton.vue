@@ -193,6 +193,15 @@ const rippleEvents = computed(() => ripple.value?.events ?? {});
     border: var(--onyx-button-border-width) solid var(--onyx-button-border-color);
     color: var(--onyx-button-text-color);
 
+    @media (prefers-reduced-motion: no-preference) {
+      &:not(:active):has(.onyx-ripple__element) {
+        transition:
+          background-color 100ms ease-out,
+          border-color 100ms ease-out,
+          color 100ms ease-out;
+      }
+    }
+
     &:focus-visible {
       outline: var(--onyx-outline-width) solid var(--onyx-button-outline-color);
     }
